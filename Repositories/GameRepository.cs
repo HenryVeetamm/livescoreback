@@ -1,5 +1,6 @@
 ﻿using DAL;
 using Domain;
+using Domain.Enums;
 using Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Base;
@@ -20,7 +21,8 @@ public class GameRepository : Repository<Game>, IGameRepository
             .ThenInclude(g => g.TeamPhotos)
             .Include(g => g.AwayTeam)
             .ThenInclude(g => g.TeamPhotos)
-            
+            .OrderByDescending(x => x.GameStatus == EGameStatus.Started)
+            .ThenByDescending(x => x.GameStatus == EGameStatus.NotStarted)
             .ToArray();
     }
 

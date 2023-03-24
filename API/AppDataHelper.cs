@@ -1,4 +1,7 @@
 ﻿using DAL;
+using Domain;
+using Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace API;
@@ -18,7 +21,6 @@ public class AppDataHelper
         
         if (configuration.GetValue<bool>("DataInitialization:All"))
         {
-            Console.WriteLine("HERE");
             context.Database.EnsureDeleted();
             context.Database.Migrate();
         }

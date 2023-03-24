@@ -72,14 +72,15 @@ public class SessionService: Service, ISessionService
     {
         //TEAMID nuputada.
         var team = _teamRepository.GetByUserId(appUser.Id);
+        var teamId = team != null ? team.Id.ToString() : "";
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, appUser.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.GivenName, appUser.FirstName),
             new Claim(JwtRegisteredClaimNames.FamilyName, appUser.LastName),
             new Claim("role", "admin"),
-            new Claim("team_id", team.Id.ToString())
         };
+        
         var signingKey =  new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
         var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 

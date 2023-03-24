@@ -22,10 +22,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("NpgsqlConnection");
+var azureDbconnectionString = builder.Configuration.GetConnectionString("AzureConnection");
 var azureConnection = builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString");
                        
 //DB
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(azureDbconnectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddMemoryCache();

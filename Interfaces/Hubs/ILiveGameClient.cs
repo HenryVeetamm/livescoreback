@@ -15,6 +15,5 @@ public interface ILiveGameClient
     Task GameStarted(GameDto game, SetDto setDto);
     Task StartNewSet(Guid gameId, SetDto set);
     Task EndGame(GameDto game);
-
     Task PlayersChanged(Guid teamId, PlayerInGameDto[] players);
 }

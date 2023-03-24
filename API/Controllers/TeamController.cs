@@ -98,6 +98,7 @@ public class TeamController : Controller
     [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [AllowAnonymous]
     public IActionResult GetUserTeamId()
     {
         var result = _teamService.GetMyTeam();
