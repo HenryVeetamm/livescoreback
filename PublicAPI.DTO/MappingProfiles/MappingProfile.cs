@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-namespace PublicAPI.DTO.MappingProfiles;
+﻿namespace PublicAPI.DTO.MappingProfiles;
 
-public class MappingProfile : Profile
+public class MappingProfile
 {
     public MappingProfile()
     {
