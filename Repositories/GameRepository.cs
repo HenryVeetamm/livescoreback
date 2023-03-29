@@ -46,7 +46,8 @@ public class GameRepository : Repository<Game>, IGameRepository
             .Include(g => g.AwayTeam)
             .ThenInclude(g => g.TeamPhotos)
             .Where(g => g.HomeTeamId == teamId || g.AwayTeamId.HasValue && g.AwayTeamId == teamId)
-            .OrderByDescending(g => g.ScheduledTime)
+            .OrderByDescending(x => x.GameStatus == EGameStatus.Started)
+            .ThenByDescending(x => x.GameStatus == EGameStatus.NotStarted)
             .ToArray();
         
     }

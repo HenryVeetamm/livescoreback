@@ -13,13 +13,15 @@ namespace Services.Hubs;
 public class LiveGameHub : Hub<ILiveGameClient>, ILiveGameHub
 {
     private readonly IHttpContextService _httpContextService;
+    private readonly IGameService _gameService;
     private static Dictionary<Guid, int> ConnectionCounts = new Dictionary<Guid, int>();
     public static Dictionary<string, Guid> UserConnections = new Dictionary<string, Guid>();
 
 
-    public LiveGameHub(IHttpContextService httpContextService)
+    public LiveGameHub(IHttpContextService httpContextService, IGameService gameService)
     {
         _httpContextService = httpContextService;
+        _gameService = gameService;
     }
     
   
@@ -37,6 +39,8 @@ public class LiveGameHub : Hub<ILiveGameClient>, ILiveGameHub
         AddUserToGame(connectionId, userId);
         
         var viewers = AddViewerToGame(gameId);
+        _gameService.CheckForMaxViews(gameId, viewers);
+        
         await Clients.OthersInGroup(gameId.ToString()).PersonJoined(viewers);
         await Clients.Caller.Connected(viewers);
             
@@ -83,6 +87,7 @@ public class LiveGameHub : Hub<ILiveGameClient>, ILiveGameHub
             if (ConnectionCounts[gameId] == 1)
             {
                 ConnectionCounts.Remove(gameId);
+                return 0;
             }
             else
             {

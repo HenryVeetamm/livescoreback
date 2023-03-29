@@ -11,4 +11,5 @@ public interface ITeamRepository : IBaseRepository<Team>
     Team[] GetTeamsForSearch(Guid excludeMyTeam);
     Team[] GetTeamsWithPictures();
     Team GetTeamById(Guid teamId);
+    
 }

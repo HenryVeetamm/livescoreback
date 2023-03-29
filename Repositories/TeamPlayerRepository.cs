@@ -23,4 +23,9 @@ public class TeamPlayerRepository : Repository<TeamPlayers>, ITeamPlayerReposito
         return LoadAll().Include(t => t.Player)
             .ThenInclude(p => p.PlayerInGames).Where(t => t.TeamId == teamId).ToArray();
     }
+
+    public TeamPlayers GetByPlayerId(Guid teamId, Guid playerId)
+    {
+        return LoadAll().FirstOrDefault(tp => tp.TeamId == teamId && tp.PlayerId == playerId);
+    }
 }

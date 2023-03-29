@@ -69,14 +69,17 @@ public class TeamService: Service, ITeamService
 
     public void UploadTeamLogo(IFormFile file, Guid teamId)
     {
-        // Extra checks, if can upload. For that team.
+        if (teamId == null) throw new Exception("Võistkonda ei leitud");
+
+        var teamLogo = _fileRepository.GetTeamLogo(teamId);
+        if (teamLogo != null) _fileRepository.Delete(teamLogo); 
         
         using (var memoryStream = new MemoryStream())
         {
             file.CopyTo(memoryStream);
             memoryStream.Position = 0;
             var response = _blobService.UploadMemoryStream(file.FileName, memoryStream, file.ContentType, BlobStorageContainers.TEAM_LOGOS);
-
+            
             var newFile = new Files
             {
                 MimeType = file.ContentType,

@@ -27,6 +27,8 @@ public class Game : BaseEntity
     public EGameType GameType { get; set; }
     
     public bool? Confirmed { get; set; }
+
+    public int?  MaxLiveViews { get; set; }
     
     public ICollection<Files>? GeneratedStatistics { get; set; }
     public ICollection<Set>? Sets { get; set; }

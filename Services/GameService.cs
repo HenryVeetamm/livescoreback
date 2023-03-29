@@ -190,6 +190,38 @@ public class GameService : Service, IGameService
         return game;
     }
 
+    public void DeleteGame(Guid gameId)
+    {
+        var game = _gameRepository.GetById(gameId);
+        if (game == null) throw new Exception("Mängu ei leitud");
+        if (game.GameStatus != EGameStatus.NotStarted) throw new Exception("Ainult alustamata mängu saab kustutada");
+
+        var currentUserTeam = _teamService.GetMyTeam();
+        if (game.HomeTeamId != currentUserTeam.Id) throw new Exception("Ainult enda loodud mänge saab kustutada");
+
+        var gamePlayers = _playerInGameRepository.GetAllPlayersInGameByGameId(gameId);
+        foreach (var gamePlayer in gamePlayers)
+        {
+            _playerInGameRepository.Delete(gamePlayer);
+        }
+        _playerInGameRepository.SaveChanges();
+        
+        _gameRepository.Delete(game);
+        _gameRepository.SaveChanges();
+    }
+
+    public void CheckForMaxViews(Guid gameId, int currentViews)
+    {
+        var game = _gameRepository.GetById(gameId);
+        if (game == null) return;
+
+        if (game.MaxLiveViews < currentViews || game.MaxLiveViews == null)
+        {
+            game.MaxLiveViews = currentViews;
+            _gameRepository.SaveChanges();
+        }
+    }
+
     private void SetGameSetWins(Game game)
     {
         var sets = _setRepository.GetCompletedSetsByGameId(game.Id);

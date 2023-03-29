@@ -146,9 +146,11 @@ public class PlayerService : Service, IPlayerService
 
     public void UploadProfilePicture(IFormFile file, Guid playerId)
     {
-        // Extra checks, if can upload. For that person.
-        //Delete other uploaded photos
-        
+       CanManageGivenPlayer(playerId);
+       
+       var profilePicture = _fileRepository.GetProfilePicture(playerId);
+       if (profilePicture != null) _fileRepository.Delete(profilePicture);
+       
         using (var memoryStream = new MemoryStream())
         {
             file.CopyTo(memoryStream);
@@ -166,5 +168,14 @@ public class PlayerService : Service, IPlayerService
             _fileRepository.Add(newFile);
             _fileRepository.SaveChanges();
         }
+    }
+
+    private void CanManageGivenPlayer(Guid playerId)
+    {
+        var givenUserTeam = _teamService.GetMyTeam();
+        if (givenUserTeam == null) throw new Exception("Sisselogitud kasutajat ei leitud");
+
+        var teamPlayer = _teamPlayerRepository.GetByPlayerId(givenUserTeam.Id, playerId);
+        if (teamPlayer == null) throw new Exception("Puudub õigus muuta");
     }
 }

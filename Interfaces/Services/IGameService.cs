@@ -14,4 +14,6 @@ public interface IGameService : IBaseService
     Set GetCurrentSet(Guid gameId);
     Game[] GetMyGames();
     Game EndGame(Guid gameId);
+    void DeleteGame(Guid gameId);
+    void CheckForMaxViews(Guid gameId,  int currentViews);
 }

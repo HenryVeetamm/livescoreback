@@ -18,12 +18,7 @@ public class PlayerController : Controller
     private readonly IAddPlayerToGameConverter _addPlayerToGameConverter;
     private readonly IPlayerInGameConverter _playerInGameConverter;
     private readonly IPlayerInGameService _playerInGameService;
-
-    //Planned endpoints
-    //1.Add player to team
-    //2.Edit player in team
-    //3.
-
+    
     public PlayerController(
         IPlayerService playerService, 
         IPlayerConverter playerConverter, 

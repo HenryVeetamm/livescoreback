@@ -40,4 +40,9 @@ public class PlayerInGameRepository: Repository<PlayerInGame>, IPlayerInGameRepo
         var playerInGameDtos = LoadAll().Where(x => x.PlayerId == playerId);
         return playerInGameDtos.ToArray();
     }
+
+    public PlayerInGame[] GetAllPlayersInGameByGameId(Guid gameId)
+    {
+        return LoadAll().Where(pig => pig.GameId == gameId).ToArray();
+    }
 }

@@ -12,4 +12,6 @@ public interface IPlayerInGameRepository : IBaseRepository<PlayerInGame>
     PlayerInGame GetWithPlayer(Guid playerInGameId);
 
     PlayerInGame[] GetAllPlayerGames(Guid playerId);
+
+    PlayerInGame[] GetAllPlayersInGameByGameId(Guid gameId);
 }

@@ -171,6 +171,15 @@ public class GameController : Controller
         return Ok(result);
     }
     
+    [HttpDelete("{gameId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult GetTeamPlayers(Guid gameId)
+    {
+        _gameService.DeleteGame(gameId);
+
+        return Ok();
+    }
 
 
 
