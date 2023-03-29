@@ -102,7 +102,7 @@ public class TeamController : Controller
     public IActionResult GetUserTeamId()
     {
         var result = _teamService.GetMyTeam();
-        return Ok(result.Id);
+        return Ok(result?.Id);
     }
     
     [HttpGet("{teamId}")]
