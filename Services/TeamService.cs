@@ -1,5 +1,6 @@
 ﻿using Constants;
 using Domain;
+using Exceptions;
 using Interfaces.Repositories;
 using Interfaces.Services;
 using Microsoft.AspNetCore.Http;
@@ -51,7 +52,7 @@ public class TeamService: Service, ITeamService
         var userId = _httpContextService.GetUserId();
         var team = _teamRepository.GetByIdAndUserId(teamDto.Id, userId);
 
-        if (team == null) throw new Exception("Team not found");
+        if (team == null) throw new LogicException("Teie võistkonda ei leitud");
 
         team.Name = teamDto.Name;
         team.HomeStadium = teamDto.HomeStadium;
@@ -69,7 +70,7 @@ public class TeamService: Service, ITeamService
 
     public void UploadTeamLogo(IFormFile file, Guid teamId)
     {
-        if (teamId == null) throw new Exception("Võistkonda ei leitud");
+        if (teamId == null) throw new LogicException("Võistkonda ei leitud");
 
         var teamLogo = _fileRepository.GetTeamLogo(teamId);
         if (teamLogo != null) _fileRepository.Delete(teamLogo); 
@@ -96,7 +97,7 @@ public class TeamService: Service, ITeamService
     public Team[] GetTeams()
     {
         var team = GetMyTeam();
-        if (team == null) throw new Exception("Team not found");
+        if (team == null) throw new LogicException("Teie võistkonda ei leitud");
 
         var teams = _teamRepository.GetTeamsForSearch(team.Id);
         return teams;

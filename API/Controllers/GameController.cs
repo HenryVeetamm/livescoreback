@@ -1,4 +1,5 @@
-﻿using Interfaces.Converters;
+﻿using Exceptions;
+using Interfaces.Converters;
 using Interfaces.Repositories;
 using Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -39,7 +40,6 @@ public class GameController : Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult GetGames([FromQuery] int page, [FromQuery] int pageSize)
     {
-        
         var result = _gameRepository.GetGames(page, pageSize);
         var dto = _gameConverter.ConvertAll(result);
         

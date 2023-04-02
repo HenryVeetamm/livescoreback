@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using API;
 using API.Extensions;
+using API.Middleware;
 using Azure.Storage.Blobs;
 using Constants;
 using DAL;
@@ -26,7 +27,7 @@ var azureDbconnectionString = builder.Configuration.GetConnectionString("AzureCo
 var azureConnection = builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString");
                        
 //DB
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(azureDbconnectionString));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddMemoryCache();
@@ -77,10 +78,10 @@ builder.Services.AddDerived(typeof(IConverter<,>), typeof(Converters.Converter<,
 builder.Services.AddSingleton(x => new BlobServiceClient(azureConnection));
 
 builder.Services.AddScoped<ILiveGameHubContext, LiveGameHubContext>();
-
+builder.Services.AddScoped<ExceptionMiddleware>();
 
 builder.Services.AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
 
 
@@ -137,6 +138,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors("CorsAllowAll");
 

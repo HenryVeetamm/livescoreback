@@ -43,8 +43,8 @@ public class PlayerService : Service, IPlayerService
     public Player AddPlayerToTeam(AddPlayerDto playerDto)
     {
         var team = _teamService.GetMyTeam();
-        if (team == null) throw new Exception("Team not found");
-        if (team.Id != playerDto.TeamId) throw new LogicException("Team Id's not matching");
+        if (team == null) throw new LogicException("Võistkonda ei leitud");
+        if (team.Id != playerDto.TeamId) throw new LogicException("Miskit läks valesti");
 
         var player = new Player
         {
@@ -72,8 +72,8 @@ public class PlayerService : Service, IPlayerService
     {
         var team = _teamService.GetMyTeam();
         var player = _playerRepository.GetById(playerDto.Id);
-        if (team == null ) throw new Exception("Team not found");
-        if (team.Id != playerDto.TeamId) throw new LogicException("Team Id's not matching");
+        if (team == null) throw new LogicException("Võistkonda ei leitud");
+        if (team.Id != playerDto.TeamId) throw new LogicException("Võistkonda ei leitud");
 
         player.FirstName = playerDto.FirstName;
         player.LastName = playerDto.LastName;
@@ -176,6 +176,6 @@ public class PlayerService : Service, IPlayerService
         if (givenUserTeam == null) throw new Exception("Sisselogitud kasutajat ei leitud");
 
         var teamPlayer = _teamPlayerRepository.GetByPlayerId(givenUserTeam.Id, playerId);
-        if (teamPlayer == null) throw new Exception("Puudub õigus muuta");
+        if (teamPlayer == null) throw new LogicException("Ainult enda võistkonna mängijaid saab muuta");
     }
 }

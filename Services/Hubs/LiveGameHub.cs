@@ -69,7 +69,7 @@ public class LiveGameHub : Hub<ILiveGameClient>, ILiveGameHub
         var gameId = Context.GetHttpContext().Request.Query["gameId"];
         if (Guid.TryParse(gameId, out Guid result)) return result;
         
-        throw new LogicException("GameID not found");
+        throw new LogicException("Ühendust ei saa luua, sest mängu Id on puudu");
     }
 
     private int AddViewerToGame(Guid gameId)

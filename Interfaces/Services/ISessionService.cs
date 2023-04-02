@@ -6,5 +6,5 @@ namespace Interfaces.Services;
 public interface ISessionService : IBaseService
 {
     Task<AuthorizationDto> Register(RegisterDto dto);
-    Task<AuthorizationDto> Login(LoginDto dto);
+    Task<AuthorizationDto> Login(LoginDto dto); 
 }

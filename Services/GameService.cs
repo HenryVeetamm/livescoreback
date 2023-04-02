@@ -36,7 +36,7 @@ public class GameService : Service, IGameService
     public Game AddGame(AddGameDto addGameDto)
     {
         var myTeam = _teamService.GetMyTeam();
-        if (myTeam == null) throw new Exception("Team not found");
+        if (myTeam == null) throw new LogicException("Võistkonda ei leitud");
 
         var game = new Game
         {
@@ -193,11 +193,11 @@ public class GameService : Service, IGameService
     public void DeleteGame(Guid gameId)
     {
         var game = _gameRepository.GetById(gameId);
-        if (game == null) throw new Exception("Mängu ei leitud");
-        if (game.GameStatus != EGameStatus.NotStarted) throw new Exception("Ainult alustamata mängu saab kustutada");
+        if (game == null) throw new LogicException("Mängu ei leitud");
+        if (game.GameStatus != EGameStatus.NotStarted) throw new LogicException("Ainult alustamata mängu saab kustutada");
 
         var currentUserTeam = _teamService.GetMyTeam();
-        if (game.HomeTeamId != currentUserTeam.Id) throw new Exception("Ainult enda loodud mänge saab kustutada");
+        if (game.HomeTeamId != currentUserTeam.Id) throw new LogicException("Ainult enda loodud mänge saab kustutada");
 
         var gamePlayers = _playerInGameRepository.GetAllPlayersInGameByGameId(gameId);
         foreach (var gamePlayer in gamePlayers)
