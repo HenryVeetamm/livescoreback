@@ -27,7 +27,7 @@ var azureDbconnectionString = builder.Configuration.GetConnectionString("AzureCo
 var azureConnection = builder.Configuration.GetConnectionString("AzureBlobStorageConnectionString");
                        
 //DB
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(azureDbconnectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddMemoryCache();
