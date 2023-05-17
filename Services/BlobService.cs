@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Interfaces.Services;
+using Microsoft.Extensions.Configuration;
 using Services.Base;
 
 namespace Services;
@@ -8,22 +9,20 @@ namespace Services;
 public class BlobService : Service, IBlobService
 {
     private readonly BlobServiceClient _blobServiceClient;
+    private readonly IConfiguration _configuration;
 
-    public BlobService(BlobServiceClient blobServiceClient)
+    public BlobService(BlobServiceClient blobServiceClient, IConfiguration configuration)
     {
         _blobServiceClient = blobServiceClient;
-    }
-
-    public string GetBlobAsync(string containerName, string fileName)
-    {
-        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-        var blobClient = containerClient.GetBlobClient(fileName);
-
-        return blobClient.Uri.AbsoluteUri;
+        _configuration = configuration;
     }
 
     public string UploadMemoryStream(string fileName, MemoryStream memoryStream, string contentType, string storage)
     {
+        var allowUpload = _configuration.GetValue<bool>("FileUpload:AllowUpload");
+
+        if (!allowUpload) return null;
+
         var containerClient = _blobServiceClient.GetBlobContainerClient(storage);
         var blob = containerClient.GetBlobClient(fileName);
 

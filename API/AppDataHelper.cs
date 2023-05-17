@@ -32,7 +32,6 @@ public class AppDataHelper
 
         if (configuration.GetValue<bool>("DataInitialization:SeedIdentity"))
         {
-            var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
             var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<AppRole>>();
 
             var roles = new string[] { "admin", "user" };
@@ -47,7 +46,7 @@ public class AppDataHelper
                         Name = roleName
                     };
 
-                    var result = roleManager.CreateAsync(role).Result;
+                    roleManager.CreateAsync(role);
                 }
             }
         }
@@ -80,8 +79,8 @@ public class AppDataHelper
                 IsActive = true
             };
             
-            var userResult = userManager.CreateAsync(user, "password").Result;
-            var roleResult = userManager.AddToRoleAsync(user, "admin").Result;
+            userManager.CreateAsync(user, "password");
+            userManager.AddToRoleAsync(user, "admin");
         }
     }
 }

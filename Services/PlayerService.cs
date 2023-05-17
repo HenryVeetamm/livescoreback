@@ -157,6 +157,8 @@ public class PlayerService : Service, IPlayerService
             memoryStream.Position = 0;
             var response = _blobService.UploadMemoryStream(file.FileName, memoryStream, file.ContentType, BlobStorageContainers.PROFILE_PICTURES);
 
+            if (response == null) return;
+            
             var newFile = new Files
             {
                 MimeType = file.ContentType,
